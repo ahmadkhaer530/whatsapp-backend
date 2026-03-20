@@ -147,6 +147,23 @@ async function connectWhatsApp() {
 }
 
 // ── Socket.io Events ─────────────────────────────────
+
+
+socket.on('wa:connect:new', () => {
+  connectWhatsApp();
+});
+
+socket.on('wa:disconnect', () => {
+  if (waSocket) {
+    waSocket.logout();
+    waSocket = null;
+    waStatus = 'disconnected';
+    io.emit('wa:status', { status: 'disconnected' });
+  }
+});
+
+
+
 io.on('connection', (socket) => {
   console.log('🔌 Client connected:', socket.id);
 
